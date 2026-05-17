@@ -2,99 +2,18 @@
 // KATEANS - DASHBOARD / KASIR (dashboard.js)
 // =============================================
 
-var keranjang   = [];
-var nomorOrder  = parseInt(localStorage.getItem('nomorOrder') || '1', 10);
+// Data keranjang: menyimpan semua item yang dipesan
+// Format: { nama: "Nasi Goreng", harga: 12000, jumlah: 1 }
+var keranjang = [];
+
+// Nomor order — baca dari localStorage agar tidak reset tiap reload
+var nomorOrder = parseInt(localStorage.getItem('nomorOrder') || '1', 10);
+
+// Biaya admin tetap
 var BIAYA_ADMIN = 500;
-var tabAktif    = 'dine';
 
-// =============================================
-// 0. RENDER MENU DARI localStorage
-// =============================================
-function renderMenuDashboard() {
-  var grid         = document.getElementById('menuGrid');
-  var dataTersimpan = localStorage.getItem('dataMenu');
-  var daftarMenu   = dataTersimpan ? JSON.parse(dataTersimpan) : [];
-
-  grid.innerHTML = '';
-
-  // Filter sesuai kategori aktif (baca dari tombol filter yang aktif)
-  var filterAktif = 'semua';
-  var tombolAktif = document.querySelector('.filter-btn.active');
-  if (tombolAktif) filterAktif = tombolAktif.getAttribute('data-kategori');
-
-  // Filter sesuai keyword pencarian
-  var keyword = '';
-  var searchEl = document.getElementById('searchInput');
-  if (searchEl) keyword = searchEl.value.toLowerCase().trim();
-
-  var adaMenu = false;
-
-  for (var i = 0; i < daftarMenu.length; i++) {
-    var m = daftarMenu[i];
-
-    // Sembunyikan stok habis
-    if (m.stock <= 0) continue;
-
-    // Filter kategori
-    if (filterAktif !== 'semua' && m.kategori !== filterAktif) continue;
-
-    // Filter pencarian
-    if (keyword && m.nama.toLowerCase().indexOf(keyword) === -1) continue;
-
-    adaMenu = true;
-
-    var gambar = m.gambar ? m.gambar : 'https://via.placeholder.com/150x150?text=Menu';
-
-    // Gunakan data-index untuk onclick agar aman dari karakter khusus di nama
-    var card = document.createElement('div');
-    card.className = 'menu-card';
-    card.setAttribute('data-kategori', m.kategori);
-    card.setAttribute('data-nama', m.nama);
-    card.setAttribute('data-harga', m.harga);
-
-    card.innerHTML =
-      '<div class="menu-img">' +
-        '<img src="' + gambar + '" alt="' + escapeHtml(m.nama) + '" ' +
-          'onerror="this.src=\'https://via.placeholder.com/150x150?text=Menu\'" />' +
-      '</div>' +
-      '<div class="menu-info">' +
-        '<div class="menu-header">' +
-          '<span class="menu-name">' + escapeHtml(m.nama) + '</span>' +
-          '<span class="menu-price">Rp. ' + formatRupiah(m.harga) + '</span>' +
-        '</div>' +
-        '<p class="menu-desc">Stok: ' + m.stock + ' tersedia</p>' +
-        '<div class="menu-footer">' +
-          '<span class="menu-rating">' +
-            '<i class="fa-solid fa-star" style="color:rgb(255,212,59)"></i> 5.0' +
-          '</span>' +
-          // Tombol menggunakan data attribute, bukan inline string nama
-          '<button class="btn-keranjang btn-add-cart">' +
-            '<i class="fa-solid fa-plus"></i> Keranjang' +
-          '</button>' +
-        '</div>' +
-      '</div>';
-
-    grid.appendChild(card);
-  }
-
-  if (!adaMenu) {
-    grid.innerHTML =
-      '<p style="color:var(--teks-abu);text-align:center;padding:40px;grid-column:1/-1;">' +
-      'Tidak ada menu yang tersedia.</p>';
-  }
-
-  // Pasang event listener ke semua tombol keranjang yang baru dibuat
-  // (cara ini aman dari masalah apostrof/kutip di nama menu)
-  var tombolKeranjang = grid.querySelectorAll('.btn-add-cart');
-  for (var j = 0; j < tombolKeranjang.length; j++) {
-    tombolKeranjang[j].addEventListener('click', function () {
-      var card  = this.closest('.menu-card');
-      var nama  = card.getAttribute('data-nama');
-      var harga = parseInt(card.getAttribute('data-harga'), 10);
-      tambahKeranjang(nama, harga);
-    });
-  }
-}
+// Tab aktif: 'dine' atau 'take'
+var tabAktif = 'dine';
 
 // =============================================
 // 1. TAMBAH ITEM KE KERANJANG
@@ -115,10 +34,7 @@ function tambahKeranjang(nama, harga) {
   }
 
   renderKeranjang();
-  tampilkanToast(
-    '<i class="fa-regular fa-circle-check" style="color:rgb(99,230,190)"></i> ' +
-    escapeHtml(nama) + ' ditambahkan!'
-  );
+  tampilkanToast('<i class="fa-regular fa-circle-check" style="color: rgb(99, 230, 190);"></i> ' + nama + ' ditambahkan!');
 }
 
 // =============================================
@@ -145,7 +61,7 @@ function renderKeranjang() {
     div.innerHTML =
       '<div class="order-item-img"><i class="fa-solid fa-utensils"></i></div>' +
       '<div class="order-item-detail">' +
-        '<div class="order-item-name">' + escapeHtml(item.nama) + '</div>' +
+        '<div class="order-item-name">' + item.nama + '</div>' +
         '<div class="order-item-price">Rp. ' + formatRupiah(item.harga) + '</div>' +
       '</div>' +
       '<div class="order-item-qty">' +
@@ -161,7 +77,7 @@ function renderKeranjang() {
 }
 
 // =============================================
-// 3. TAMBAH JUMLAH ITEM
+// 3. TAMBAH JUMLAH ITEM (tombol + di keranjang)
 // =============================================
 function tambahItem(index) {
   keranjang[index].jumlah = keranjang[index].jumlah + 1;
@@ -169,13 +85,15 @@ function tambahItem(index) {
 }
 
 // =============================================
-// 4. KURANGI JUMLAH ITEM
+// 4. KURANGI JUMLAH ITEM (tombol − di keranjang)
 // =============================================
 function kurangiItem(index) {
   keranjang[index].jumlah = keranjang[index].jumlah - 1;
+
   if (keranjang[index].jumlah <= 0) {
     keranjang.splice(index, 1);
   }
+
   renderKeranjang();
 }
 
@@ -184,10 +102,13 @@ function kurangiItem(index) {
 // =============================================
 function hitungTotal() {
   var subtotal = 0;
+
   for (var i = 0; i < keranjang.length; i++) {
-    subtotal += keranjang[i].harga * keranjang[i].jumlah;
+    subtotal = subtotal + (keranjang[i].harga * keranjang[i].jumlah);
   }
+
   var total = keranjang.length > 0 ? subtotal + BIAYA_ADMIN : 0;
+
   document.getElementById('subtotal').textContent = 'Rp. ' + formatRupiah(subtotal);
   document.getElementById('total').textContent    = 'Rp. ' + formatRupiah(total);
 }
@@ -197,17 +118,13 @@ function hitungTotal() {
 // =============================================
 function hapusSemua() {
   if (keranjang.length === 0) {
-    tampilkanToast(
-      '<i class="fa-solid fa-triangle-exclamation" style="color:rgb(255,212,59)"></i> ' +
-      'Keranjang sudah kosong.'
-    );
+    tampilkanToast('<i class="fa-solid fa-triangle-exclamation" style="color: rgb(255, 212, 59);"></i> Keranjang sudah kosong.');
     return;
   }
+
   keranjang = [];
   renderKeranjang();
-  tampilkanToast(
-    '<i class="fa-solid fa-trash" style="color:rgb(255,99,99)"></i> Semua pesanan dihapus.'
-  );
+  tampilkanToast('<i class="fa-solid fa-trash" style="color: rgb(255, 99, 99);"></i> Semua pesanan dihapus.');
 }
 
 // =============================================
@@ -215,8 +132,10 @@ function hapusSemua() {
 // =============================================
 function gantiTab(jenis) {
   tabAktif = jenis;
+
   var tabDine = document.getElementById('tabDine');
   var tabTake = document.getElementById('tabTake');
+
   if (jenis === 'dine') {
     tabDine.classList.add('active');
     tabTake.classList.remove('active');
@@ -242,19 +161,20 @@ function pilihBayar(tombol) {
 // =============================================
 function checkout() {
   if (keranjang.length === 0) {
-    tampilkanToast(
-      '<i class="fa-solid fa-triangle-exclamation" style="color:rgb(255,212,59)"></i> ' +
-      'Tambahkan menu terlebih dahulu!'
-    );
+    tampilkanToast('<i class="fa-solid fa-triangle-exclamation" style="color: rgb(255, 212, 59);"></i> Tambahkan menu terlebih dahulu!');
     return;
   }
 
+  // Ambil metode bayar yang aktif
   var metodeBayarEl = document.querySelector('.pay-btn.active');
   var namaMetode    = metodeBayarEl ? metodeBayarEl.textContent.trim() : 'Cash';
 
+  // Baca pesanan lama dari localStorage
   var pesananLama  = localStorage.getItem('dataPesanan');
   var semuaPesanan = pesananLama ? JSON.parse(pesananLama) : [];
 
+  // PERBAIKAN: Sinkronkan nomorOrder dengan ID terbesar yang ada di localStorage
+  // agar tidak pernah menghasilkan ID duplikat walau localStorage diubah dari luar
   var maxIdAda = 0;
   for (var m = 0; m < semuaPesanan.length; m++) {
     if (semuaPesanan[m].id > maxIdAda) maxIdAda = semuaPesanan[m].id;
@@ -264,19 +184,21 @@ function checkout() {
     localStorage.setItem('nomorOrder', nomorOrder);
   }
 
-  var sekarang   = new Date();
-  var namaBulan  = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  var tanggalStr = sekarang.getDate() + ' ' + namaBulan[sekarang.getMonth()] + ' ' + sekarang.getFullYear();
-  var jamStr     = sekarang.getHours() + ':' + String(sekarang.getMinutes()).padStart(2, '0');
+  // Buat tanggal sekarang
+  var sekarang    = new Date();
+  var namaBulan   = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  var tanggalStr  = sekarang.getDate() + ' ' + namaBulan[sekarang.getMonth()] + ' ' + sekarang.getFullYear();
+  var jamStr      = sekarang.getHours() + ':' + String(sekarang.getMinutes()).padStart(2, '0');
 
+  // Buat pesanan baru
   var pesananBaru = {
-    id     : nomorOrder,
-    status : 'menunggu',
-    tipe   : tabAktif === 'dine' ? 'Dine In' : 'Take Away',
-    waktu  : jamStr,
+    id    : nomorOrder,
+    status: 'menunggu',
+    tipe  : tabAktif === 'dine' ? 'Dine In' : 'Take Away',
+    waktu : jamStr,
     tanggal: tanggalStr,
-    metode : namaMetode,
-    items  : []
+    metode: namaMetode,
+    items : []
   };
 
   for (var i = 0; i < keranjang.length; i++) {
@@ -290,37 +212,20 @@ function checkout() {
   semuaPesanan.push(pesananBaru);
   localStorage.setItem('dataPesanan', JSON.stringify(semuaPesanan));
 
-  // ← KURANGI STOK di localStorage untuk setiap item yang dipesan
-  var dataTersimpan = localStorage.getItem('dataMenu');
-  if (dataTersimpan) {
-    var daftarMenu = JSON.parse(dataTersimpan);
-    for (var k = 0; k < keranjang.length; k++) {
-      for (var n = 0; n < daftarMenu.length; n++) {
-        if (daftarMenu[n].nama === keranjang[k].nama) {
-          daftarMenu[n].stock = Math.max(0, daftarMenu[n].stock - keranjang[k].jumlah);
-          break;
-        }
-      }
-    }
-    localStorage.setItem('dataMenu', JSON.stringify(daftarMenu));
-  }
-
-  nomorOrder++;
+  // Naikkan nomor order dan simpan ke localStorage
+  nomorOrder = nomorOrder + 1;
   localStorage.setItem('nomorOrder', nomorOrder);
 
-  tampilkanToast(
-    '<i class="fa-regular fa-circle-check" style="color:rgb(99,230,190)"></i> ' +
-    'Pesanan #' + pesananBaru.id + ' berhasil! Bayar via ' + namaMetode + '.'
-  );
+  tampilkanToast('<i class="fa-regular fa-circle-check" style="color: rgb(99, 230, 190);"></i> Pesanan #' + pesananBaru.id + ' berhasil! Bayar via ' + namaMetode + '.');
 
+  // Reset keranjang
   keranjang = [];
   document.getElementById('orderNumber').textContent = nomorOrder;
   renderKeranjang();
-  renderMenuDashboard(); // ← refresh kartu menu (hilangkan yang stok jadi 0)
 }
 
 // =============================================
-// 10. FILTER KATEGORI — re-render menu setelah filter
+// 10. FILTER KATEGORI MENU
 // =============================================
 var filterBtns = document.querySelectorAll('.filter-btn');
 
@@ -330,53 +235,65 @@ for (var f = 0; f < filterBtns.length; f++) {
       filterBtns[j].classList.remove('active');
     }
     this.classList.add('active');
-    renderMenuDashboard(); // render ulang dengan filter baru
+
+    var kategori   = this.getAttribute('data-kategori');
+    var semuaCard  = document.querySelectorAll('.menu-card');
+
+    for (var k = 0; k < semuaCard.length; k++) {
+      var cardKategori = semuaCard[k].getAttribute('data-kategori');
+      if (kategori === 'semua' || cardKategori === kategori) {
+        semuaCard[k].classList.remove('tersembunyi');
+      } else {
+        semuaCard[k].classList.add('tersembunyi');
+      }
+    }
   });
 }
 
 // =============================================
-// 11. PENCARIAN MENU — re-render menu setelah ketik
+// 11. PENCARIAN MENU
 // =============================================
 var searchInput = document.getElementById('searchInput');
+
 searchInput.addEventListener('input', function () {
-  renderMenuDashboard(); // render ulang dengan keyword baru
+  var keyword   = this.value.toLowerCase().trim();
+  var semuaCard = document.querySelectorAll('.menu-card');
+
+  for (var i = 0; i < semuaCard.length; i++) {
+    var namaMenu = semuaCard[i].querySelector('.menu-name').textContent.toLowerCase();
+    if (namaMenu.includes(keyword)) {
+      semuaCard[i].classList.remove('tersembunyi');
+    } else {
+      semuaCard[i].classList.add('tersembunyi');
+    }
+  }
 });
 
 // =============================================
 // 12. FUNGSI PEMBANTU
 // =============================================
+
+// Format angka jadi format rupiah: 12000 → "12.000"
 function formatRupiah(angka) {
   return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
-function escapeHtml(teks) {
-  return teks
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
+// Tampilkan notifikasi toast (mendukung HTML untuk ikon)
 function tampilkanToast(pesan) {
   var toast = document.getElementById('toast');
   toast.innerHTML = pesan;
   toast.classList.add('show');
+
   setTimeout(function () {
     toast.classList.remove('show');
   }, 2500);
 }
 
-// Sync real-time jika seller mengubah menu di tab lain
-window.addEventListener('storage', function (e) {
-  if (e.key === 'dataMenu') {
-    renderMenuDashboard();
-  }
-});
-
 // =============================================
-// 13. INISIALISASI
+// 13. INISIALISASI AWAL
 // =============================================
+// Tampilkan nomor order yang tersimpan
 document.getElementById('orderNumber').textContent = nomorOrder;
-renderMenuDashboard();
+
+// Render keranjang kosong saat halaman pertama dibuka
 renderKeranjang();

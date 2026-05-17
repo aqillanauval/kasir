@@ -2,30 +2,22 @@
 // KATEANS SELLER - seller.js
 // =============================================
 
-// DATA MENU AWAL — hanya dipakai jika localStorage kosong (pertama kali)
-var DATA_AWAL = [
+// =============================================
+// DATA MENU AWAL
+// Setiap menu punya: id, nama, harga, stock,
+// kategori, dan gambar (url / base64)
+// =============================================
+var dataMenu = [
   { id: 1, nama: 'Nasi Goreng',      harga: 17000, stock: 20, kategori: 'makanan',  gambar: 'nasgor.png'  },
   { id: 2, nama: 'Nasi Ayam Geprek', harga: 13000, stock: 10, kategori: 'makanan',  gambar: 'geprek.png'  },
-  { id: 3, nama: 'Kentang Goreng',   harga: 10000, stock: 15, kategori: 'snack',    gambar: 'kentang.png' },
-  { id: 4, nama: 'Es Teh',           harga: 5000,  stock: 30, kategori: 'minuman',  gambar: 'teh.png'     },
-  { id: 5, nama: 'Es Krim',          harga: 8000,  stock: 12, kategori: 'dessert',  gambar: 'es.png'      },
-  { id: 6, nama: 'Kopi Susu',        harga: 8000,  stock: 20, kategori: 'minuman',  gambar: 'kopi.png'    }
+  { id: 3, nama: 'Kentang Goreng',   harga: 10000, stock: 0,  kategori: 'snack',    gambar: 'kentang.png' },
+  { id: 4, nama: 'Es Teh',           harga: 5000,  stock: 3,  kategori: 'minuman',  gambar: 'teh.png'     },
+  { id: 5, nama: 'Es Krim',          harga: 8000,  stock: 0,  kategori: 'dessert',  gambar: 'es.png'      },
+  { id: 6, nama: 'Kopi Susu',        harga: 8000,  stock: 0,  kategori: 'minuman',  gambar: 'kopi.png'    }
 ];
 
-// Baca dari localStorage; jika belum ada, pakai data awal lalu simpan
-function memuatDataMenu() {
-  var tersimpan = localStorage.getItem('dataMenu');
-  if (tersimpan) {
-    return JSON.parse(tersimpan);
-  }
-  // Pertama kali: simpan data awal ke localStorage
-  localStorage.setItem('dataMenu', JSON.stringify(DATA_AWAL));
-  return DATA_AWAL.map(function(m) { return Object.assign({}, m); });
-}
-
-var dataMenu = memuatDataMenu();
-
-// Hitung ID berikutnya dari ID terbesar yang ada
+// PERBAIKAN: idBerikutnya dihitung dari ID terbesar yang sudah ada
+// agar tidak pernah duplikat meski data diubah
 function hitungIdBerikutnya() {
   var maxId = 0;
   for (var i = 0; i < dataMenu.length; i++) {
@@ -35,15 +27,11 @@ function hitungIdBerikutnya() {
 }
 var idBerikutnya = hitungIdBerikutnya();
 
+// Menyimpan ID menu yang sedang diedit (null = mode tambah baru)
 var idSedangDiedit = null;
-var filterAktif    = 'semua';
 
-// =============================================
-// SIMPAN KE localStorage (dipanggil tiap ada perubahan)
-// =============================================
-function simpanKeStorage() {
-  localStorage.setItem('dataMenu', JSON.stringify(dataMenu));
-}
+// Filter kategori aktif
+var filterAktif = 'semua';
 
 // =============================================
 // 1. RENDER TABEL
@@ -54,6 +42,7 @@ function renderTabel() {
 
   tbody.innerHTML = '';
 
+  // Filter data sesuai kategori aktif
   var dataFiltered = [];
   for (var i = 0; i < dataMenu.length; i++) {
     if (filterAktif === 'semua' || dataMenu[i].kategori === filterAktif) {
@@ -70,10 +59,12 @@ function renderTabel() {
   for (var j = 0; j < dataFiltered.length; j++) {
     var menu = dataFiltered[j];
 
+    // Badge status berdasarkan stock
     var badgeHTML = menu.stock > 0
       ? '<span class="badge badge-tersedia"><i class="fa-solid fa-circle" style="font-size:0.5rem"></i> Tersedia</span>'
       : '<span class="badge badge-habis"><i class="fa-solid fa-circle" style="font-size:0.5rem"></i> Habis</span>';
 
+    // Gambar: gunakan placeholder jika kosong
     var gambarSrc = menu.gambar ? menu.gambar : 'https://via.placeholder.com/60x60?text=Menu';
 
     var tr = document.createElement('tr');
@@ -101,7 +92,7 @@ function renderTabel() {
 }
 
 // =============================================
-// 2. BUKA MODAL TAMBAH
+// 2. BUKA MODAL TAMBAH MENU BARU
 // =============================================
 function bukaModalTambah() {
   idSedangDiedit = null;
@@ -109,14 +100,16 @@ function bukaModalTambah() {
   document.getElementById('modalJudul').textContent = 'Tambah Menu';
   document.getElementById('btnSimpan').textContent  = 'Simpan';
 
-  var previewEl     = document.getElementById('previewGambar');
-  var placeholderEl = document.getElementById('uploadPlaceholder');
-  var inputGambarEl = document.getElementById('inputGambar');
+  // Reset preview gambar
+  var previewEl      = document.getElementById('previewGambar');
+  var placeholderEl  = document.getElementById('uploadPlaceholder');
+  var inputGambarEl  = document.getElementById('inputGambar');
 
   if (previewEl)     { previewEl.src = ''; previewEl.style.display = 'none'; }
   if (placeholderEl) { placeholderEl.style.display = 'flex'; }
   if (inputGambarEl) { inputGambarEl.value = ''; }
 
+  // Kosongkan semua input
   document.getElementById('inputNama').value     = '';
   document.getElementById('inputHarga').value    = '';
   document.getElementById('inputStock').value    = '';
@@ -127,7 +120,7 @@ function bukaModalTambah() {
 }
 
 // =============================================
-// 3. BUKA MODAL EDIT
+// 3. BUKA MODAL EDIT MENU
 // =============================================
 function bukaModalEdit(id) {
   var menu = cariMenuById(id);
@@ -143,13 +136,17 @@ function bukaModalEdit(id) {
   document.getElementById('inputStock').value    = menu.stock;
   document.getElementById('inputKategori').value = menu.kategori;
 
+  // Tampilkan preview gambar jika ada
   var previewEl     = document.getElementById('previewGambar');
   var placeholderEl = document.getElementById('uploadPlaceholder');
   var inputGambarEl = document.getElementById('inputGambar');
 
   if (menu.gambar && menu.gambar !== '') {
-    if (previewEl) { previewEl.src = menu.gambar; previewEl.style.display = 'block'; }
-    if (placeholderEl) { placeholderEl.style.display = 'none'; }
+    if (previewEl) {
+      previewEl.src           = menu.gambar;
+      previewEl.style.display = 'block';
+    }
+    if (placeholderEl) placeholderEl.style.display = 'none';
   } else {
     if (previewEl)     { previewEl.src = ''; previewEl.style.display = 'none'; }
     if (placeholderEl) { placeholderEl.style.display = 'flex'; }
@@ -170,30 +167,41 @@ function simpanMenu() {
   var stock    = document.getElementById('inputStock').value.trim();
   var kategori = document.getElementById('inputKategori').value;
 
+  // Ambil gambar dari preview (base64 dari upload) atau string kosong
   var previewEl = document.getElementById('previewGambar');
   var gambar    = (previewEl && previewEl.style.display !== 'none' && previewEl.src)
-                  ? previewEl.src : '';
+                  ? previewEl.src
+                  : '';
 
+  // --- Validasi ---
   var valid = true;
 
   if (nama === '') {
     tampilkanError('errNama', 'Nama menu tidak boleh kosong.');
     valid = false;
-  } else { sembunyikanError('errNama'); }
+  } else {
+    sembunyikanError('errNama');
+  }
 
   if (harga === '' || isNaN(Number(harga)) || Number(harga) < 0) {
     tampilkanError('errHarga', 'Masukkan harga yang valid (angka ≥ 0).');
     valid = false;
-  } else { sembunyikanError('errHarga'); }
+  } else {
+    sembunyikanError('errHarga');
+  }
 
   if (stock === '' || isNaN(Number(stock)) || Number(stock) < 0) {
     tampilkanError('errStock', 'Masukkan stok yang valid (angka ≥ 0).');
     valid = false;
-  } else { sembunyikanError('errStock'); }
+  } else {
+    sembunyikanError('errStock');
+  }
 
   if (!valid) return;
 
+  // --- Proses simpan ---
   if (idSedangDiedit === null) {
+    // MODE TAMBAH
     dataMenu.push({
       id      : idBerikutnya,
       nama    : nama,
@@ -202,23 +210,25 @@ function simpanMenu() {
       kategori: kategori,
       gambar  : gambar
     });
-    idBerikutnya++;
-    tampilkanToast('<i class="fa-regular fa-circle-check" style="color:rgb(99,230,190)"></i> Menu "' + nama + '" berhasil ditambahkan!');
+    idBerikutnya = idBerikutnya + 1;
+    tampilkanToast('<i class="fa-regular fa-circle-check" style="color: rgb(99, 230, 190);"></i> Menu "' + nama + '" berhasil ditambahkan!');
+
   } else {
+    // MODE EDIT
     for (var i = 0; i < dataMenu.length; i++) {
       if (dataMenu[i].id === idSedangDiedit) {
         dataMenu[i].nama     = nama;
         dataMenu[i].harga    = Number(harga);
         dataMenu[i].stock    = Number(stock);
         dataMenu[i].kategori = kategori;
+        // Hanya perbarui gambar jika ada upload baru (bukan placeholder)
         if (gambar !== '') dataMenu[i].gambar = gambar;
         break;
       }
     }
-    tampilkanToast('<i class="fa-regular fa-circle-check" style="color:rgb(99,230,190)"></i> Menu "' + nama + '" berhasil diperbarui!');
+    tampilkanToast('<i class="fa-regular fa-circle-check" style="color: rgb(99, 230, 190);"></i> Menu "' + nama + '" berhasil diperbarui!');
   }
 
-  simpanKeStorage(); // ← simpan ke localStorage
   tutupModal();
   renderTabel();
 }
@@ -239,8 +249,7 @@ function hapusMenu(id) {
   }
   dataMenu = dataBaru;
 
-  simpanKeStorage(); // ← simpan ke localStorage
-  tampilkanToast('<i class="fa-regular fa-circle-check" style="color:rgb(99,230,190)"></i> Menu "' + menu.nama + '" berhasil dihapus.');
+  tampilkanToast('<i class="fa-regular fa-circle-check" style="color: rgb(99, 230, 190);"></i> Menu "' + menu.nama + '" berhasil dihapus.');
   renderTabel();
 }
 
@@ -261,23 +270,26 @@ for (var f = 0; f < filterBtns.length; f++) {
 }
 
 // =============================================
-// 7. PENCARIAN
+// 7. PENCARIAN MENU
 // =============================================
 var searchInputEl = document.getElementById('searchInput');
 if (searchInputEl) {
   searchInputEl.addEventListener('input', function () {
     var keyword    = this.value.toLowerCase().trim();
     var semuaBaris = document.querySelectorAll('#tabelBody tr');
+
     for (var i = 0; i < semuaBaris.length; i++) {
       var namaCel = semuaBaris[i].cells[1];
       if (!namaCel) continue;
-      semuaBaris[i].style.display = namaCel.textContent.toLowerCase().includes(keyword) ? '' : 'none';
+
+      var nama = namaCel.textContent.toLowerCase();
+      semuaBaris[i].style.display = nama.includes(keyword) ? '' : 'none';
     }
   });
 }
 
 // =============================================
-// 8. MODAL
+// 8. BUKA & TUTUP MODAL
 // =============================================
 function bukaModal() {
   document.getElementById('modalOverlay').classList.add('aktif');
@@ -290,14 +302,17 @@ function tutupModal() {
 }
 
 // =============================================
-// 9. PREVIEW GAMBAR
+// 9. PREVIEW GAMBAR DARI UPLOAD
+// PERBAIKAN: simpan gambar dari reader.result ke previewGambar.src
+// sehingga simpanMenu() dapat mengambilnya dengan benar
 // =============================================
 function previewUpload(input) {
   var file = input.files[0];
   if (!file) return;
 
+  // Validasi tipe file (hanya gambar)
   if (!file.type.startsWith('image/')) {
-    tampilkanToast('<i class="fa-solid fa-triangle-exclamation" style="color:rgb(255,212,59)"></i> File harus berupa gambar.');
+    tampilkanToast('<i class="fa-solid fa-triangle-exclamation" style="color: rgb(255, 212, 59);"></i> File harus berupa gambar.');
     return;
   }
 
@@ -305,8 +320,14 @@ function previewUpload(input) {
   reader.onload = function (e) {
     var preview     = document.getElementById('previewGambar');
     var placeholder = document.getElementById('uploadPlaceholder');
-    if (preview)     { preview.src = e.target.result; preview.style.display = 'block'; }
-    if (placeholder) { placeholder.style.display = 'none'; }
+
+    if (preview) {
+      preview.src           = e.target.result; // simpan base64
+      preview.style.display = 'block';
+    }
+    if (placeholder) {
+      placeholder.style.display = 'none';
+    }
   };
   reader.readAsDataURL(file);
 }
@@ -314,6 +335,8 @@ function previewUpload(input) {
 // =============================================
 // 10. FUNGSI PEMBANTU
 // =============================================
+
+// Cari menu berdasarkan id
 function cariMenuById(id) {
   for (var i = 0; i < dataMenu.length; i++) {
     if (dataMenu[i].id === id) return dataMenu[i];
@@ -321,10 +344,12 @@ function cariMenuById(id) {
   return null;
 }
 
+// Format angka jadi ribuan: 12000 → "12.000"
 function formatRupiah(angka) {
   return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
+// Tampilkan pesan error
 function tampilkanError(idElemen, pesan) {
   var el = document.getElementById(idElemen);
   if (!el) return;
@@ -332,33 +357,31 @@ function tampilkanError(idElemen, pesan) {
   el.style.display = 'block';
 }
 
+// Sembunyikan satu pesan error
 function sembunyikanError(idElemen) {
   var el = document.getElementById(idElemen);
   if (!el) return;
   el.style.display = 'none';
 }
 
+// Sembunyikan semua pesan error di modal
 function sembunyikanSemuaError() {
   sembunyikanError('errNama');
   sembunyikanError('errHarga');
   sembunyikanError('errStock');
 }
 
+// PERBAIKAN: gunakan innerHTML agar ikon FontAwesome tampil
 function tampilkanToast(pesan) {
   var toast = document.getElementById('toast');
   if (!toast) return;
   toast.innerHTML = pesan;
   toast.classList.add('show');
-  setTimeout(function () { toast.classList.remove('show'); }, 2500);
-}
 
-// Sync jika dashboard mengubah stok di tab lain
-window.addEventListener('storage', function (e) {
-  if (e.key === 'dataMenu') {
-    dataMenu = JSON.parse(e.newValue);
-    renderTabel();
-  }
-});
+  setTimeout(function () {
+    toast.classList.remove('show');
+  }, 2500);
+}
 
 // =============================================
 // 11. INISIALISASI
