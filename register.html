@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kateans - Daftar Akun</title>
+  <script src="https://kit.fontawesome.com/b7c9988b7a.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="register.css" />
+</head>
+<body>
+
+  <div class="card">
+
+    <!-- Sisi Kiri: Gambar -->
+    <div class="card-image">
+      <img src="kantin.png" alt="Kateans Restaurant" />
+    </div>
+
+    <!-- Sisi Kanan: Form Register -->
+    <div class="card-form">
+      <h1 class="brand-title">Kateans</h1>
+      <p class="brand-subtitle">Selamat datang, silahkan login</p>
+
+      <form id="registerForm" novalidate>
+
+        <!-- Nama Lengkap -->
+        <div class="form-group">
+          <label for="nama">Nama Lengkap</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="fa-solid fa-user" style="color: rgb(177, 151, 252);"></i></span>
+            <input
+              type="text"
+              id="nama"
+              class="form-input"
+              placeholder="Masukan nama lengkap"
+              autocomplete="name"
+            />
+          </div>
+          <span class="error-msg" id="namaError"></span>
+        </div>
+
+        <!-- Alamat Email -->
+        <div class="form-group">
+          <label for="email">Alamat Email</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="fa-regular fa-envelope" style="color: rgb(177, 151, 252);"></i></span>
+            <input
+              type="email"
+              id="email"
+              class="form-input"
+              placeholder="contoh@email.com"
+              autocomplete="email"
+            />
+          </div>
+          <span class="error-msg" id="emailError"></span>
+        </div>
+
+        <!-- Kata Sandi -->
+        <div class="form-group">
+          <label for="password">Kata Sandi</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="fa-solid fa-lock" style="color: rgb(177, 151, 252);"></i></span>
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              placeholder="••••••••••"
+              autocomplete="new-password"
+            />
+            <button type="button" class="toggle-pass" id="togglePass" aria-label="Tampilkan kata sandi">
+              <i class="fa-regular fa-eye" style="color: rgb(177, 151, 252);"></i>
+            </button>
+          </div>
+          <span class="error-msg" id="passError"></span>
+        </div>
+
+        <!-- Konfirmasi Kata Sandi -->
+        <div class="form-group">
+          <label for="confirmPassword">Konfirmasi Kata Sandi</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="fa-solid fa-lock" style="color: rgb(177, 151, 252);"></i></span>
+            <input
+              type="password"
+              id="confirmPassword"
+              class="form-input"
+              placeholder="••••••••••"
+              autocomplete="new-password"
+            />
+            <button type="button" class="toggle-pass" id="toggleConfirm" aria-label="Tampilkan konfirmasi sandi">
+              <i class="fa-regular fa-eye" style="color: rgb(177, 151, 252);"></i>
+            </button>
+          </div>
+          <span class="error-msg" id="confirmError"></span>
+        </div>
+
+        <!-- Checkbox Syarat & Ketentuan -->
+        <div class="terms-row">
+          <input type="checkbox" id="terms" />
+          <label for="terms">
+            Saya setuju dengan
+            <a href="#" class="terms-link">Syarat &amp; Ketentuan</a>
+            serta
+            <a href="#" class="terms-link">kebijakan Privasi</a>
+            Kantin Pojok.
+          </label>
+        </div>
+        <span class="error-msg" id="termsError"></span>
+
+        <!-- Tombol Sign Up -->
+        <button type="submit" class="btn-signup">Sign up</button>
+
+      </form>
+
+      <p class="login-text">
+        Sudah memiliki akun? <a href="index.html">Login</a>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Toast Notifikasi -->
+  <div class="toast" id="toast"></div>
+
+  <!-- File JS terpisah -->
+  <script src="register.js"></script>
+
+</body>
+</html>

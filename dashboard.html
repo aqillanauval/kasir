@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kateans - Dashboard</title>
+  <script src="https://kit.fontawesome.com/b7c9988b7a.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+
+  <!-- ================================
+       SIDEBAR KIRI
+  ================================ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <i class="fa-solid fa-dumpster-fire"></i>
+      <span>Kateans</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="report.html" class="nav-item" data-tooltip="Beranda">
+        <i class="fa-regular fa-house"></i>
+      </a>
+       <a href="seller.html" class="nav-item" data-tooltip="Manajemen Menu">
+        <i class="fa-solid fa-receipt"></i>
+      </a>
+      <a href="dashboard.html" class="nav-item active" data-tooltip="Dashboard Pembeli">
+        <i class="fa-solid fa-utensils"></i>
+      </a>
+     <a href="orders.html" class="nav-item" data-tooltip="Riwayat">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </a>
+      <a href="profile.html" class="nav-item" data-tooltip="Profil">
+        <i class="fa-solid fa-user"></i>
+      </a>
+    </nav>
+
+    <a href="index.html" class="nav-item logout" data-tooltip="Keluar">
+     <i class="fa-solid fa-right-from-bracket" style="color: rgb(255, 61, 0);"></i>
+    </a>
+  </aside>
+
+  <!-- ================================
+       KONTEN UTAMA
+  ================================ -->
+  <div class="main-wrapper">
+
+    <!-- NAVBAR ATAS -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h2 class="page-title">Pilih Menu Makananmu</h2>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Cari menu..." />
+        </div>
+        <button class="notif-btn">
+          <i class="fa-regular fa-bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+        <div class="user-info">
+          <div class="user-avatar">A</div>
+          <span class="user-name">Aqilla Nauval</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- AREA SCROLL KONTEN -->
+    <div class="content-area">
+
+      <!-- FILTER KATEGORI -->
+      <div class="filter-bar">
+        <button class="filter-btn active" data-kategori="semua">Semua</button>
+        <button class="filter-btn" data-kategori="makanan">Makanan</button>
+        <button class="filter-btn" data-kategori="snack">Snack</button>
+        <button class="filter-btn" data-kategori="dessert">Dessert</button>
+        <button class="filter-btn" data-kategori="minuman">Minuman</button>
+      </div>
+
+      <!-- GRID MENU -->
+      <div class="menu-grid" id="menuGrid">
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================
+       PANEL PESANAN KANAN
+  ================================ -->
+  <aside class="order-panel">
+
+    <div class="order-header">
+      <h3>Pesanan Saat Ini</h3>
+      <button class="btn-clear" id="btnClear" onclick="hapusSemua()">
+        <i class="fa-regular fa-trash-can"></i>
+      </button>
+    </div>
+
+    <!-- Tab Dine / Take Away -->
+    <div class="order-tab">
+      <button class="tab-btn active" id="tabDine" onclick="gantiTab('dine')">Dine In</button>
+      <button class="tab-btn" id="tabTake" onclick="gantiTab('take')">Take Away</button>
+    </div>
+
+    <p class="order-number">Order #<span id="orderNumber">001</span></p>
+
+    <!-- List item pesanan -->
+    <div class="order-list" id="orderList">
+      <p class="empty-msg" id="emptyMsg">Belum ada pesanan.</p>
+    </div>
+
+    <!-- Ringkasan harga -->
+    <div class="order-summary">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="subtotal">Rp. 0</span>
+      </div>
+      <div class="summary-row">
+        <span>Biaya Admin</span>
+        <span>Rp. 500</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span id="total">Rp. 500</span>
+      </div>
+    </div>
+
+    <!-- Metode Pembayaran -->
+    <div class="payment-section">
+      <h4>Pembayaran</h4>
+      <div class="payment-methods">
+        <button class="pay-btn active" onclick="pilihBayar(this)">Cash</button>
+        <button class="pay-btn" onclick="pilihBayar(this)">Debit</button>
+        <button class="pay-btn" onclick="pilihBayar(this)">E-Wallet</button>
+      </div>
+    </div>
+
+    <button class="btn-checkout" onclick="checkout()">
+      <i class="fa-solid fa-bag-shopping"></i> Checkout
+    </button>
+
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="dashboard.js"></script>
+
+</body>
+</html>

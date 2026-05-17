@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kateans - Manajemen Menu</title>
+    <script src="https://kit.fontawesome.com/b7c9988b7a.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="seller.css" />
+</head>
+<body>
+
+  <!-- ================================
+       SIDEBAR KIRI
+  ================================ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <i class="fa-solid fa-dumpster-fire"></i>
+      <span>Kateans</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="report.html" class="nav-item" data-tooltip="Beranda">
+        <i class="fa-regular fa-house"></i>
+      </a>
+       <a href="seller.html" class="nav-item active" data-tooltip="Manajemen Menu">
+        <i class="fa-solid fa-receipt"></i>
+      </a>
+      <a href="dashboard.html" class="nav-item" data-tooltip="Dashboard Pembeli">
+        <i class="fa-solid fa-utensils"></i>
+      </a>
+     <a href="orders.html" class="nav-item" data-tooltip="Riwayat">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </a>
+      <a href="profile.html" class="nav-item" data-tooltip="Profil">
+        <i class="fa-solid fa-user"></i>
+      </a>
+    </nav>
+
+    <a href="index.html" class="nav-item logout" data-tooltip="Keluar">
+     <i class="fa-solid fa-right-from-bracket" style="color: rgb(255, 61, 0);"></i>
+    </a>
+  </aside>
+
+  <!-- ================================
+       KONTEN UTAMA
+  ================================ -->
+  <div class="main-wrapper">
+
+    <!-- NAVBAR ATAS -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h2 class="page-title">Manajemen Menu</h2>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Cari menu..." />
+        </div>
+        <button class="notif-btn">
+          <i class="fa-regular fa-bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+        <div class="user-info">
+          <div class="user-avatar">A</div>
+          <span class="user-name">Aqilla Nauval</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- AREA KONTEN -->
+    <div class="content-area">
+
+      <!-- BARIS FILTER + TOMBOL TAMBAH -->
+      <div class="toolbar">
+        <div class="filter-bar">
+          <button class="filter-btn active" data-kategori="semua">All</button>
+          <button class="filter-btn" data-kategori="makanan">Food</button>
+          <button class="filter-btn" data-kategori="snack">Snack</button>
+          <button class="filter-btn" data-kategori="dessert">Dessert</button>
+          <button class="filter-btn" data-kategori="minuman">Drinks</button>
+        </div>
+        <button class="btn-tambah" onclick="bukaModalTambah()">
+          <i class="fa-solid fa-plus"></i> Tambah Menu
+        </button>
+      </div>
+
+      <!-- TABEL MENU -->
+      <div class="table-wrapper">
+        <table class="menu-table">
+          <thead>
+            <tr>
+              <th>Gambar</th>
+              <th>Item</th>
+              <th>Harga</th>
+              <th>Stock</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tabelBody">
+            <!-- Baris diisi oleh JavaScript -->
+          </tbody>
+        </table>
+
+        <!-- Pesan jika data kosong -->
+        <div class="empty-state" id="emptyState" style="display:none;">
+         <i class="fa-solid fa-bowl-food"></i>
+          <p>Belum ada menu. Klik <strong>+ Tambah Menu</strong> untuk mulai.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================================
+       MODAL TAMBAH / EDIT MENU
+  ================================ -->
+  <div class="modal-overlay" id="modalOverlay" onclick="tutupModal()"></div>
+
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h3 id="modalJudul">Tambah Menu</h3>
+      <button class="modal-close" onclick="tutupModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- Nama Menu -->
+      <div class="form-group">
+        <label for="inputNama">Nama Menu</label>
+        <div class="input-wrapper">
+          <span class="input-icon"><i class="fa-regular fa-pen-to-square"></i></span>
+          <input type="text" id="inputNama" class="form-input" placeholder="Contoh: Nasi Goreng" />
+        </div>
+        <span class="error-msg" id="errNama"></span>
+      </div>
+
+      <!-- Harga -->
+      <div class="form-group">
+        <label for="inputHarga">Harga (Rp)</label>
+        <div class="input-wrapper">
+          <span class="input-icon"><i class="fa-solid fa-tags"></i></span>
+          <input type="number" id="inputHarga" class="form-input" placeholder="Contoh: 12000" min="0" />
+        </div>
+        <span class="error-msg" id="errHarga"></span>
+      </div>
+
+      <!-- Stock -->
+      <div class="form-group">
+        <label for="inputStock">Stock</label>
+        <div class="input-wrapper">
+          <span class="input-icon"><i class="fa-solid fa-boxes-stacked"></i></span>
+          <input type="number" id="inputStock" class="form-input" placeholder="Contoh: 20" min="0" />
+        </div>
+        <span class="error-msg" id="errStock"></span>
+      </div>
+
+      <!-- Kategori -->
+      <div class="form-group">
+        <label for="inputKategori">Kategori</label>
+        <div class="input-wrapper">
+          <span class="input-icon"><i class="fa-solid fa-layer-group"></i></span>
+          <select id="inputKategori" class="form-input form-select">
+            <option value="makanan">Food</option>
+            <option value="snack">Snack</option>
+            <option value="dessert">Dessert</option>
+            <option value="minuman">Drinks</option>
+          </select>
+        </div>
+      </div>
+
+        <!-- Upload Gambar -->
+    <div class="form-group">
+    <label>Gambar Menu</label>
+    <div class="upload-area" id="uploadArea" onclick="document.getElementById('inputGambar').click()">
+        <img id="previewGambar" src="" alt="" style="display:none;" />
+        <div id="uploadPlaceholder">
+        <i class="fa-regular fa-image"></i>
+        <p>Klik untuk pilih gambar</p>
+        <span>JPG, PNG</span>
+        </div>
+    </div>
+    <input type="file" id="inputGambar" accept="image/*" style="display:none;" onchange="previewUpload(this)" />
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-batal" onclick="tutupModal()">Batal</button>
+      <button class="btn-simpan" id="btnSimpan" onclick="simpanMenu()">Simpan</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="seller.js"></script>
+
+</body>
+</html>

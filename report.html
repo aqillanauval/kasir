@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kateans - Laporan Penjualan</title>
+  <script src="https://kit.fontawesome.com/b7c9988b7a.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="report.css" />
+</head>
+<body>
+
+  <!-- ================================
+       SIDEBAR KIRI
+  ================================ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <i class="fa-solid fa-basket-shopping"></i>
+      <span>Kateans</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="report.html" class="nav-item active" data-tooltip="Beranda">
+        <i class="fa-regular fa-house"></i>
+      </a>
+       <a href="seller.html" class="nav-item" data-tooltip="Manajemen Menu">
+        <i class="fa-solid fa-receipt"></i>
+      </a>
+      <a href="dashboard.html" class="nav-item" data-tooltip="Dashboard Pembeli">
+        <i class="fa-solid fa-utensils"></i>
+      </a>
+     <a href="orders.html" class="nav-item" data-tooltip="Riwayat">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </a>
+      <a href="profile.html" class="nav-item" data-tooltip="Profil">
+        <i class="fa-solid fa-user"></i>
+      </a>
+    </nav>
+
+    <a href="index.html" class="nav-item logout" data-tooltip="Keluar">
+      <i class="fa-solid fa-right-from-bracket" style="color: rgb(255, 61, 0);"></i>
+    </a>
+  </aside>
+
+  <!-- ================================
+       KONTEN UTAMA
+  ================================ -->
+  <div class="main-wrapper">
+
+    <!-- NAVBAR ATAS -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div>
+          <h2 class="page-title">Laporan Penjualan</h2>
+          <p class="page-sub">Ringkasan dan detail penjualan Kateans.</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Cari transaksi..." />
+        </div>
+        <button class="notif-btn">
+          <i class="fa-regular fa-bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+        <div class="user-info">
+          <div class="user-avatar">A</div>
+          <span class="user-name">Aqilla Nauval</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- AREA KONTEN -->
+    <div class="content-area">
+
+      <!-- BARIS FILTER -->
+      <div class="filter-panel">
+        <!-- Filter Periode -->
+        <div class="filter-group">
+          <label>Periode</label>
+          <div class="select-wrapper">
+            <i class="fa-regular fa-calendar"></i>
+            <select id="filterPeriode">
+              <option value="semua">Semua Periode</option>
+              <option value="2026-05" selected>Mei 2026</option>
+              <option value="2026-04">April 2026</option>
+              <option value="2026-03">Maret 2026</option>
+            </select>
+            <i class="fa-solid fa-chevron-down arrow"></i>
+          </div>
+        </div>
+
+        <!-- Filter Kategori -->
+        <div class="filter-group">
+          <label>Kategori</label>
+          <div class="select-wrapper">
+            <select id="filterKategori">
+              <option value="semua">Semua Kategori</option>
+              <option value="makanan">Makanan</option>
+              <option value="minuman">Minuman</option>
+              <option value="snack">Snack</option>
+              <option value="dessert">Dessert</option>
+            </select>
+            <i class="fa-solid fa-chevron-down arrow"></i>
+          </div>
+        </div>
+
+        <!-- Filter Metode Bayar -->
+        <div class="filter-group">
+          <label>Metode Pembayaran</label>
+          <div class="select-wrapper">
+            <select id="filterMetode">
+              <option value="semua">Semua Metode</option>
+              <option value="Cash">Cash</option>
+              <option value="Debit">Debit</option>
+              <option value="E-Wallet">E-Wallet</option>
+            </select>
+            <i class="fa-solid fa-chevron-down arrow"></i>
+          </div>
+        </div>
+
+        <!-- Tombol Terapkan & Reset -->
+        <div class="filter-actions">
+          <button class="btn-terapkan" onclick="terapkanFilter()">Terapkan</button>
+          <button class="btn-reset" onclick="resetFilter()">Reset</button>
+        </div>
+
+        <!-- Tombol Export -->
+        <button class="btn-export" onclick="exportLaporan()">
+          <i class="fa-solid fa-download"></i> Export Laporan
+        </button>
+      </div>
+
+      <!-- BARIS UTAMA: Grafik + Statistik -->
+      <div class="main-row">
+
+        <!-- GRAFIK BATANG -->
+        <div class="chart-card">
+          <h3 class="card-title">Penjualan per Bulan</h3>
+          <div class="chart-wrapper">
+            <canvas id="grafikPenjualan"></canvas>
+          </div>
+        </div>
+
+        <!-- KARTU STATISTIK (kanan) -->
+        <div class="stats-col">
+
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#d1fae5;">
+              <i class="fa-solid fa-bag-shopping" style="color:#059669;"></i>
+            </div>
+            <div class="stat-detail">
+              <span class="stat-label">Total Penjualan</span>
+              <span class="stat-value" id="statTotalPenjualan">Rp. 0</span>
+              <span class="stat-change positif" id="statNaikPenjualan">
+                <i class="fa-solid fa-arrow-up"></i> 0%
+              </span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#dbeafe;">
+              <i class="fa-solid fa-cart-shopping" style="color:#2563eb;"></i>
+            </div>
+            <div class="stat-detail">
+              <span class="stat-label">Total Transaksi</span>
+              <span class="stat-value" id="statTotalTransaksi">0</span>
+              <span class="stat-change positif" id="statNaikTransaksi">
+                <i class="fa-solid fa-arrow-up"></i> 0%
+              </span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#fef9c3;">
+              <i class="fa-solid fa-chart-line" style="color:#ca8a04;"></i>
+            </div>
+            <div class="stat-detail">
+              <span class="stat-label">Rata-rata Transaksi</span>
+              <span class="stat-value" id="statRataRata">Rp. 0</span>
+              <span class="stat-change positif" id="statNaikRata">
+                <i class="fa-solid fa-arrow-up"></i> 0%
+              </span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#fce7f3;">
+              <i class="fa-solid fa-box" style="color:#db2777;"></i>
+            </div>
+            <div class="stat-detail">
+              <span class="stat-label">Item Terjual</span>
+              <span class="stat-value" id="statItemTerjual">0</span>
+              <span class="stat-change positif" id="statNaikItem">
+                <i class="fa-solid fa-arrow-up"></i> 0%
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TABEL DETAIL PENJUALAN -->
+      <div class="table-card">
+        <h3 class="card-title">Detail Penjualan</h3>
+        <div class="table-wrapper">
+          <table class="detail-table">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Item</th>
+                <th>Jumlah</th>
+                <th>Metode Pembayaran</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tabelBody">
+              <!-- Diisi JavaScript -->
+            </tbody>
+          </table>
+          <div class="empty-state" id="emptyState" style="display:none;">
+            <i class="fa-solid fa-file-circle-xmark"></i>
+            <p>Tidak ada data transaksi.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- akhir content-area -->
+
+  </div>
+  <!-- Modal Detail Transaksi -->
+  <div class="modal-overlay" id="modalOverlay" onclick="tutupModal()"></div>
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h3 id="modalJudul">Detail Transaksi</h3>
+      <button class="modal-close" onclick="tutupModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Diisi JavaScript -->
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+  <script src="report.js"></script>
+
+</body>
+</html>

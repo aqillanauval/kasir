@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kateans - Profil</title>
+  <script src="https://kit.fontawesome.com/b7c9988b7a.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="profile.css" />
+</head>
+<body>
+
+  <!-- ================================
+       SIDEBAR KIRI
+  ================================ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <i class="fa-solid fa-dumpster-fire"></i>
+      <span>Kateans</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="report.html" class="nav-item" data-tooltip="Beranda">
+        <i class="fa-regular fa-house"></i>
+      </a>
+      <a href="seller.html" class="nav-item" data-tooltip="Manajemen Menu">
+        <i class="fa-solid fa-receipt"></i>
+      </a>
+      <a href="dashboard.html" class="nav-item" data-tooltip="Dashboard Pembeli">
+        <i class="fa-solid fa-utensils"></i>
+      </a>
+      <a href="orders.html" class="nav-item" data-tooltip="Riwayat">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </a>
+      <a href="profile.html" class="nav-item active" data-tooltip="Profil">
+        <i class="fa-solid fa-user"></i>
+      </a>
+    </nav>
+
+    <a href="index.html" class="nav-item logout" data-tooltip="Keluar">
+      <i class="fa-solid fa-right-from-bracket" style="color: rgb(255, 61, 0);"></i>
+    </a>
+  </aside>
+
+  <!-- ================================
+       KONTEN UTAMA
+  ================================ -->
+  <div class="main-wrapper">
+
+    <!-- NAVBAR ATAS -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h2 class="page-title">Profil Saya</h2>
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn">
+          <i class="fa-regular fa-bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+        <div class="user-info">
+          <div class="user-avatar" id="topbarAvatar">A</div>
+          <span class="user-name" id="topbarNama">Aqilla Nauval</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- AREA KONTEN -->
+    <div class="content-area">
+
+      <div class="profil-grid">
+
+        <!-- ============================
+             KARTU KIRI: FOTO & IDENTITAS
+        ============================= -->
+        <div class="kartu kartu-identitas">
+
+          <!-- Area foto profil -->
+          <div class="foto-wrapper">
+            <div class="foto-lingkaran" id="fotoLingkaran">
+              <span class="foto-inisial" id="fotoInisial">AN</span>
+              <img id="fotoImg" src="" alt="Foto Profil" style="display:none;" />
+            </div>
+            <!-- Tombol ganti foto -->
+            <button class="tombol-foto" onclick="document.getElementById('inputFoto').click()" title="Ganti Foto">
+              <i class="fa-solid fa-camera"></i>
+            </button>
+            <input type="file" id="inputFoto" accept="image/*" style="display:none;" onchange="gantiFoto(this)" />
+          </div>
+
+          <!-- Nama dan peran -->
+          <h2 class="profil-nama" id="profilNama">Aqilla Nauval</h2>
+          <span class="profil-peran">
+            <i class="fa-solid fa-store"></i> Penjual
+          </span>
+
+          <!-- Info tambahan -->
+          <div class="info-badges">
+            <div class="info-badge">
+              <i class="fa-regular fa-calendar"></i>
+              <span>Member sejak Mei 2025</span>
+            </div>
+            <div class="info-badge sukses">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Akun Terverifikasi</span>
+            </div>
+          </div>
+
+          <!-- Statistik singkat -->
+          <div class="mini-stats">
+            <div class="mini-stat">
+              <span class="mini-stat-angka" id="statPesanan">0</span>
+              <span class="mini-stat-label">Pesanan</span>
+            </div>
+            <div class="mini-stat-divider"></div>
+            <div class="mini-stat">
+              <span class="mini-stat-angka" id="statMenu">0</span>
+              <span class="mini-stat-label">Menu</span>
+            </div>
+            <div class="mini-stat-divider"></div>
+            <div class="mini-stat">
+              <span class="mini-stat-angka" id="statSelesai">0</span>
+              <span class="mini-stat-label">Selesai</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ============================
+             KARTU KANAN: INFORMASI PRIBADI
+        ============================= -->
+        <div class="kartu kartu-info">
+
+          <!-- Header kartu -->
+          <div class="kartu-header">
+            <h3 class="kartu-judul">
+              <i class="fa-solid fa-id-card"></i> Informasi Pribadi
+            </h3>
+            <!-- Tombol Edit / Simpan -->
+            <button class="tombol-edit" id="tombolEdit" onclick="toggleEdit()">
+              <i class="fa-regular fa-pen-to-square"></i> Edit
+            </button>
+          </div>
+
+          <!-- Form informasi -->
+          <div class="form-profil">
+
+            <!-- Nama Lengkap -->
+            <div class="form-group">
+              <label for="inputNama">Nama Lengkap</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                <input type="text" id="inputNama" class="form-input" value="Aqilla Nauval" disabled />
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label for="inputEmail">Email</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
+                <input type="email" id="inputEmail" class="form-input" value="aqilla@student.ub.ac.id" disabled />
+              </div>
+            </div>
+
+            <!-- Nomor Telepon -->
+            <div class="form-group">
+              <label for="inputTelepon">Nomor Telepon</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="fa-solid fa-phone"></i></span>
+                <input type="text" id="inputTelepon" class="form-input" value="08123456789" disabled />
+              </div>
+            </div>
+
+            <!-- Nama Toko -->
+            <div class="form-group">
+              <label for="inputToko">Nama Toko / Kantin</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="fa-solid fa-store"></i></span>
+                <input type="text" id="inputToko" class="form-input" value="Kateans" disabled />
+              </div>
+            </div>
+
+            <!-- Tombol Simpan (muncul saat mode edit) -->
+            <div class="tombol-simpan-wrapper" id="tombolSimpanWrapper" style="display:none;">
+              <button class="tombol-batal" onclick="batalEdit()">
+                <i class="fa-solid fa-xmark"></i> Batal
+              </button>
+              <button class="tombol-simpan" onclick="simpanProfil()">
+                <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ============================
+             KARTU BAWAH KIRI: GANTI PASSWORD
+        ============================= -->
+        <div class="kartu kartu-password">
+
+          <div class="kartu-header">
+            <h3 class="kartu-judul">
+              <i class="fa-solid fa-lock"></i> Ganti Kata Sandi
+            </h3>
+          </div>
+
+          <div class="form-profil">
+
+            <!-- Password Lama -->
+            <div class="form-group">
+              <label for="inputPassLama">Kata Sandi Lama</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                <input type="password" id="inputPassLama" class="form-input" placeholder="Masukkan kata sandi lama" />
+                <button type="button" class="toggle-pass" onclick="lihatSandi('inputPassLama', this)">
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+              <span class="error-msg" id="errPassLama"></span>
+            </div>
+
+            <!-- Password Baru -->
+            <div class="form-group">
+              <label for="inputPassBaru">Kata Sandi Baru</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                <input type="password" id="inputPassBaru" class="form-input" placeholder="Minimal 6 karakter" />
+                <button type="button" class="toggle-pass" onclick="lihatSandi('inputPassBaru', this)">
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+              <span class="error-msg" id="errPassBaru"></span>
+            </div>
+
+            <!-- Konfirmasi Password Baru -->
+            <div class="form-group">
+              <label for="inputPassKonfirm">Konfirmasi Kata Sandi Baru</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                <input type="password" id="inputPassKonfirm" class="form-input" placeholder="Ulangi kata sandi baru" />
+                <button type="button" class="toggle-pass" onclick="lihatSandi('inputPassKonfirm', this)">
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+              <span class="error-msg" id="errPassKonfirm"></span>
+            </div>
+
+            <button class="tombol-simpan full-width" onclick="gantiPassword()">
+              <i class="fa-solid fa-key"></i> Perbarui Kata Sandi
+            </button>
+
+          </div>
+        </div>
+
+        <!-- ============================
+             KARTU BAWAH KANAN: PENGATURAN AKUN
+        ============================= -->
+        <div class="kartu kartu-pengaturan">
+
+          <div class="kartu-header">
+            <h3 class="kartu-judul">
+              <i class="fa-solid fa-gear"></i> Pengaturan Akun
+            </h3>
+          </div>
+
+          <div class="pengaturan-list">
+
+            <!-- Toggle Notifikasi -->
+            <div class="pengaturan-item">
+              <div class="pengaturan-info">
+                <i class="fa-regular fa-bell pengaturan-icon"></i>
+                <div>
+                  <p class="pengaturan-nama">Notifikasi Pesanan</p>
+                  <p class="pengaturan-desc">Terima notifikasi saat ada pesanan masuk</p>
+                </div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggleNotif" checked onchange="simpanPengaturan()" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <!-- Toggle Suara -->
+            <div class="pengaturan-item">
+              <div class="pengaturan-info">
+                <i class="fa-solid fa-volume-high pengaturan-icon"></i>
+                <div>
+                  <p class="pengaturan-nama">Suara Notifikasi</p>
+                  <p class="pengaturan-desc">Mainkan suara saat pesanan baru masuk</p>
+                </div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggleSuara" onchange="simpanPengaturan()" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <!-- Toggle Auto Print -->
+            <div class="pengaturan-item">
+              <div class="pengaturan-info">
+                <i class="fa-solid fa-print pengaturan-icon"></i>
+                <div>
+                  <p class="pengaturan-nama">Auto Print Struk</p>
+                  <p class="pengaturan-desc">Cetak struk otomatis setelah checkout</p>
+                </div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="togglePrint" onchange="simpanPengaturan()" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <!-- Tombol Logout -->
+            <div class="pengaturan-item pengaturan-bahaya">
+              <div class="pengaturan-info">
+                <i class="fa-solid fa-right-from-bracket pengaturan-icon merah"></i>
+                <div>
+                  <p class="pengaturan-nama merah">Keluar dari Akun</p>
+                  <p class="pengaturan-desc">Sesi kamu akan berakhir</p>
+                </div>
+              </div>
+              <button class="tombol-keluar" onclick="keluarAkun()">
+                Keluar
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script src="profile.js"></script>
+</body>
+</html>

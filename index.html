@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kateans - Login</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://kit.fontawesome.com/b7c9988b7a.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <div class="card">
+
+    <!-- Sisi Kiri: Gambar -->
+    <div class="card-image">
+      <img
+        src="kantin.png"
+        alt="Kateans Restaurant"
+      />
+    </div>
+
+    <!-- Sisi Kanan: Form Login -->
+    <div class="card-form">
+      <h1 class="brand-title">Kateans</h1>
+      <p class="brand-subtitle">Selamat datang, silahkan login</p>
+
+      <form id="loginForm" novalidate>
+
+        <!-- Input Email -->
+        <div class="form-group">
+          <label for="email">Email</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="fa-solid fa-user" style="color: rgb(177, 151, 252);"></i></span>
+            <input
+              type="email"
+              id="email"
+              class="form-input"
+              placeholder="Masukkan email"
+              autocomplete="email"
+            />
+          </div>
+          <span class="error-msg" id="emailError"></span>
+        </div>
+
+        <!-- Input Kata Sandi -->
+        <div class="form-group">
+          <div class="label-row">
+            <label for="password">Kata Sandi</label>
+            <a href="#" class="forgot-link">Lupa sandi?</a>
+          </div>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="fa-solid fa-lock" style="color: rgb(177, 151, 252);"></i></span>
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              placeholder="••••••••••"
+              autocomplete="current-password"
+            />
+            <button type="button" class="toggle-pass" id="togglePass" aria-label="Tampilkan kata sandi">
+                <i class="fa-regular fa-eye" style="color: rgb(177, 151, 252);"></i>
+            </button>
+          </div>
+          <span class="error-msg" id="passError"></span>
+        </div>
+
+        <!-- Checkbox Ingat Saya -->
+        <div class="remember-row">
+          <input type="checkbox" id="remember" />
+          <label for="remember">Ingatkan saya di perangkat ini</label>
+        </div>
+
+        <!-- Tombol Login -->
+        <button type="submit" class="btn-login">Login</button>
+
+      </form>
+
+      <p class="register-text">
+        Belum punya akun? <a href="register.html">Daftar Sekarang</a>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Toast Notifikasi -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

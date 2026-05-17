@@ -1,0 +1,524 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+/* =====================
+   VARIABEL WARNA
+===================== */
+:root {
+  --kuning:    #f5b800;
+  --kuning-tua:#e0a800;
+  --biru:      #2563eb;
+  --hijau:     #059669;
+  --hijau-muda:#d1fae5;
+  --merah:     #ef4444;
+  --abu-badge: #6b7280;
+  --teks-gelap:#1a2340;
+  --teks-abu:  #6b7280;
+  --bg-abu:    #f3f4f6;
+  --border:    #e5e7eb;
+  --putih:     #ffffff;
+  --sidebar-w: 72px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg-abu);
+  color: var(--teks-gelap);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* =====================
+   SIDEBAR
+===================== */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--putih);
+  border-right: 1.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 100;
+}
+
+.sidebar-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 32px;
+}
+
+.sidebar-logo i {
+  font-size: 1.6rem;
+  color: var(--kuning);
+}
+
+.sidebar-logo span {
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: var(--teks-gelap);
+  letter-spacing: 0.5px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.nav-item {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  color: var(--teks-abu);
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  background: #fef9e7;
+  color: var(--kuning-tua);
+}
+
+.nav-item.active {
+  background: var(--kuning);
+  color: var(--teks-gelap);
+}
+
+.nav-item::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 58px;
+  background: var(--teks-gelap);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.nav-item:hover::after {
+  opacity: 1;
+}
+
+.logout {
+  margin-top: auto;
+  color: var(--merah);
+}
+
+.logout:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* =====================
+   KONTEN UTAMA
+===================== */
+.main-wrapper {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* =====================
+   NAVBAR ATAS
+   — flex-wrap agar tidak menumpuk
+     saat layar sempit atau ada tombol tambahan
+===================== */
+.topbar {
+  background: var(--putih);
+  border-bottom: 1.5px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;          /* ← turun baris otomatis jika tidak muat */
+  gap: 10px;                /* ← jarak antar baris saat wrap */
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.topbar-left {
+  flex-shrink: 0;           /* judul tidak menyusut */
+}
+
+.page-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--teks-gelap);
+}
+
+/* Sisi kanan topbar: kumpulan semua kontrol */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;          /* ← item di dalam kanan juga bisa wrap */
+  gap: 10px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-abu);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 14px;
+}
+
+.search-box i { color: var(--teks-abu); font-size: 0.9rem; }
+
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.88rem;
+  color: var(--teks-gelap);
+  width: 180px;
+}
+
+.search-box input::placeholder { color: #b0b8c9; }
+
+.notif-btn {
+  position: relative;
+  background: var(--bg-abu);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--teks-abu);
+  font-size: 1rem;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.notif-btn:hover { background: #fef9e7; color: var(--kuning-tua); }
+
+.notif-dot {
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 8px; height: 8px;
+  background: var(--merah);
+  border-radius: 50%;
+  border: 2px solid var(--putih);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.user-avatar {
+  width: 36px; height: 36px;
+  background: var(--kuning);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--teks-gelap);
+}
+
+.user-name { font-size: 0.88rem; font-weight: 700; }
+.user-info i { font-size: 0.7rem; color: var(--teks-abu); }
+
+/* =====================
+   TOMBOL RESET PESANAN
+   — selalu di ujung kanan, tidak menumpuk
+===================== */
+.btn-reset-pesanan {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1.5px solid #fca5a5;
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;      /* ← teks tidak pecah ke baris baru */
+  flex-shrink: 0;           /* ← tombol tidak menyusut */
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-reset-pesanan:hover {
+  background: #fecaca;
+  transform: translateY(-1px);
+}
+
+.btn-reset-pesanan:active {
+  transform: translateY(0);
+}
+
+.btn-reset-pesanan i {
+  font-size: 0.85rem;
+}
+
+/* =====================
+   AREA KONTEN
+===================== */
+.content-area {
+  padding: 24px;
+  flex: 1;
+}
+
+/* =====================
+   TAB AKTIF / SELESAI
+===================== */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  margin-bottom: 24px;
+  border-bottom: 2px solid var(--border);
+}
+
+.tab-btn {
+  padding: 10px 24px;
+  border: none;
+  background: transparent;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--teks-abu);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tab-btn:hover {
+  color: var(--teks-gelap);
+}
+
+.tab-btn.active {
+  color: var(--hijau);
+  border-bottom-color: var(--hijau);
+}
+
+/* =====================
+   GRID KARTU PESANAN
+===================== */
+.order-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.order-card {
+  background: var(--putih);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeUp 0.35s ease both;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.order-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-nomor {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--teks-gelap);
+}
+
+/* Badge status */
+.badge {
+  padding: 5px 13px;
+  border-radius: 40px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.badge-menunggu  { background: #f3f4f6; color: var(--abu-badge); }
+.badge-diproses  { background: #dbeafe; color: var(--biru); }
+.badge-siap      { background: var(--hijau-muda); color: var(--hijau); }
+.badge-selesai   { background: #f3f4f6; color: var(--abu-badge); }
+
+.card-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-item-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  color: var(--teks-gelap);
+  font-weight: 600;
+}
+
+.card-item-nama  { color: var(--teks-gelap); }
+.card-item-harga { color: var(--teks-abu); font-weight: 600; }
+
+.card-divider {
+  border: none;
+  border-top: 1.5px solid var(--border);
+}
+
+.card-total {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--teks-gelap);
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: var(--teks-abu);
+  font-weight: 600;
+}
+
+/* =====================
+   TOMBOL AKSI KARTU
+===================== */
+.btn-aksi {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 13px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.btn-proses {
+  background: var(--biru);
+  color: var(--putih);
+  box-shadow: 0 4px 14px rgba(37,99,235,0.25);
+}
+
+.btn-proses:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.btn-siap {
+  background: var(--hijau);
+  color: var(--putih);
+  box-shadow: 0 4px 14px rgba(5,150,105,0.25);
+}
+
+.btn-siap:hover {
+  background: #047857;
+  transform: translateY(-2px);
+}
+
+.btn-selesai {
+  background: var(--bg-abu);
+  color: var(--teks-abu);
+  cursor: default;
+}
+
+/* =====================
+   EMPTY STATE
+===================== */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--teks-abu);
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: var(--border);
+  margin-bottom: 14px;
+  display: block;
+}
+
+.empty-state p {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* =====================
+   TOAST
+===================== */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: var(--teks-gelap);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 40px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 999;
+  white-space: nowrap;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

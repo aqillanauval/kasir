@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kateans - Kelola Pesanan</title>
+  <script src="https://kit.fontawesome.com/b7c9988b7a.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="orders.css" />
+</head>
+<body>
+
+  <!-- ================================
+       SIDEBAR KIRI
+  ================================ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <i class="fa-solid fa-dumpster-fire"></i>
+      <span>Kateans</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="report.html" class="nav-item" data-tooltip="Beranda">
+        <i class="fa-regular fa-house"></i>
+      </a>
+      <a href="seller.html" class="nav-item" data-tooltip="Manajemen Menu">
+        <i class="fa-solid fa-receipt"></i>
+      </a>
+      <a href="dashboard.html" class="nav-item" data-tooltip="Dashboard Pembeli">
+        <i class="fa-solid fa-utensils"></i>
+      </a>
+      <a href="orders.html" class="nav-item active" data-tooltip="Riwayat">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </a>
+      <a href="profile.html" class="nav-item" data-tooltip="Profil">
+        <i class="fa-solid fa-user"></i>
+      </a>
+    </nav>
+
+    <a href="index.html" class="nav-item logout" data-tooltip="Keluar">
+      <i class="fa-solid fa-right-from-bracket" style="color: rgb(255, 61, 0);"></i>
+    </a>
+  </aside>
+
+  <!-- ================================
+       KONTEN UTAMA
+  ================================ -->
+  <div class="main-wrapper">
+
+    <!-- NAVBAR ATAS -->
+    <header class="topbar">
+
+      <!-- KIRI: Judul halaman -->
+      <div class="topbar-left">
+        <h2 class="page-title">Riwayat Pesanan</h2>
+      </div>
+
+      <!-- KANAN: Search + Notif + User + Tombol Reset -->
+      <div class="topbar-right">
+
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Cari nomor pesanan..." />
+        </div>
+
+        <button class="notif-btn">
+          <i class="fa-regular fa-bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+
+        <div class="user-info">
+          <div class="user-avatar">A</div>
+          <span class="user-name">Aqilla Nauval</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        <!-- TOMBOL RESET — selalu di ujung kanan, tidak menumpuk -->
+        <button class="btn-reset-pesanan" onclick="resetSemuaPesanan()">
+          <i class="fa-solid fa-trash"></i>
+          <span>Reset</span>
+        </button>
+
+      </div>
+    </header>
+
+    <!-- AREA KONTEN -->
+    <div class="content-area">
+
+      <!-- TAB PESANAN AKTIF / SELESAI -->
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tabAktif" onclick="gantiTab('aktif')">
+          Pesanan Aktif (<span id="jumlahAktif">0</span>)
+        </button>
+        <button class="tab-btn" id="tabSelesai" onclick="gantiTab('selesai')">
+          Selesai (<span id="jumlahSelesai">0</span>)
+        </button>
+      </div>
+
+      <!-- GRID KARTU PESANAN -->
+      <div class="order-grid" id="orderGrid"></div>
+
+      <!-- State kosong -->
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <i class="fa-solid fa-box-open"></i>
+        <p id="emptyText">Tidak ada pesanan aktif saat ini.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="orders.js"></script>
+
+</body>
+</html>

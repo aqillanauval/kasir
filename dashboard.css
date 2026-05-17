@@ -1,0 +1,741 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+/* =====================
+   VARIABEL WARNA
+===================== */
+:root {
+  --kuning:    #f5b800;
+  --kuning-tua:#e0a800;
+  --biru:      #2563eb;
+  --biru-tua:  #1d4ed8;
+  --hijau:     #059669;
+  --teks-gelap:#1a2340;
+  --teks-abu:  #6b7280;
+  --bg-abu:    #f3f4f6;
+  --border:    #e5e7eb;
+  --putih:     #ffffff;
+  --sidebar-w: 72px;
+  --panel-w:   300px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg-abu);
+  color: var(--teks-gelap);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* =====================
+   SIDEBAR KIRI
+===================== */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--putih);
+  border-right: 1.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 100;
+}
+
+/* Logo sidebar */
+.sidebar-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 32px;
+}
+
+.sidebar-logo i {
+  font-size: 1.6rem;
+  color: var(--kuning);
+}
+
+.sidebar-logo span {
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: var(--teks-gelap);
+  letter-spacing: 0.5px;
+}
+
+/* Nav item sidebar */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.nav-item {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  color: var(--teks-abu);
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  background: #fef9e7;
+  color: var(--kuning-tua);
+}
+
+.nav-item.active {
+  background: var(--kuning);
+  color: var(--teks-gelap);
+}
+
+/* Tooltip saat hover */
+.nav-item::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 58px;
+  background: var(--teks-gelap);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.nav-item:hover::after {
+  opacity: 1;
+}
+
+/* Tombol logout di bawah */
+.logout {
+  margin-top: auto;
+  color: #ef4444;
+}
+
+.logout:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* =====================
+   AREA KONTEN UTAMA
+===================== */
+.main-wrapper {
+  margin-left: var(--sidebar-w);
+  margin-right: var(--panel-w);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* =====================
+   NAVBAR ATAS
+===================== */
+.topbar {
+  background: var(--putih);
+  border-bottom: 1.5px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.page-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--teks-gelap);
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Kotak pencarian */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-abu);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 14px;
+}
+
+.search-box i {
+  color: var(--teks-abu);
+  font-size: 0.9rem;
+}
+
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.88rem;
+  color: var(--teks-gelap);
+  width: 150px;
+}
+
+.search-box input::placeholder {
+  color: #b0b8c9;
+}
+
+/* Tombol notifikasi */
+.notif-btn {
+  position: relative;
+  background: var(--bg-abu);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--teks-abu);
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.notif-btn:hover {
+  background: #fef9e7;
+  color: var(--kuning-tua);
+}
+
+/* Titik merah notif */
+.notif-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 2px solid var(--putih);
+}
+
+/* Info user */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  background: var(--kuning);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--teks-gelap);
+}
+
+.user-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--teks-gelap);
+}
+
+.user-info i {
+  font-size: 0.7rem;
+  color: var(--teks-abu);
+}
+
+/* =====================
+   AREA SCROLL KONTEN
+===================== */
+.content-area {
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* =====================
+   FILTER KATEGORI
+===================== */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 20px;
+  border: 2px solid var(--border);
+  border-radius: 40px;
+  background: var(--putih);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--teks-abu);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  border-color: var(--kuning);
+  color: var(--teks-gelap);
+}
+
+.filter-btn.active {
+  background: var(--kuning);
+  border-color: var(--kuning);
+  color: var(--teks-gelap);
+}
+
+/* =====================
+   GRID MENU
+===================== */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+/* Satu card menu */
+.menu-card {
+  background: var(--putih);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: fadeUp 0.4s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.menu-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+/* Gambar menu */
+.menu-img {
+  height: 150px;
+  overflow: hidden;
+}
+
+.menu-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.menu-card:hover .menu-img img {
+  transform: scale(1.06);
+}
+
+/* Info bawah card */
+.menu-info {
+  padding: 14px;
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.menu-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--teks-gelap);
+}
+
+.menu-price {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--biru);
+}
+
+.menu-desc {
+  font-size: 0.8rem;
+  color: var(--teks-abu);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+/* Footer rating + tombol */
+.menu-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-rating {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f59e0b;
+}
+
+.menu-rating i {
+  color: #f59e0b;
+}
+
+/* Tombol tambah keranjang */
+.btn-keranjang {
+  background: var(--hijau);
+  color: var(--putih);
+  border: none;
+  border-radius: 10px;
+  padding: 7px 13px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-keranjang:hover {
+  background: #047857;
+  transform: scale(1.05);
+}
+
+.btn-keranjang:active {
+  transform: scale(0.97);
+}
+
+/* Card tersembunyi saat filter */
+.menu-card.tersembunyi {
+  display: none;
+}
+
+/* =====================
+   PANEL PESANAN KANAN
+===================== */
+.order-panel {
+  width: var(--panel-w);
+  background: var(--putih);
+  border-left: 1.5px solid var(--border);
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 18px;
+  overflow-y: auto;
+  gap: 14px;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-header h3 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--teks-gelap);
+}
+
+/* Tombol hapus semua */
+.btn-clear {
+  background: #fee2e2;
+  border: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ef4444;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.btn-clear:hover {
+  background: #fecaca;
+}
+
+/* Tab Dine / Take Away */
+.order-tab {
+  display: flex;
+  background: var(--bg-abu);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 9px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.83rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  color: var(--teks-abu);
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background: var(--biru);
+  color: var(--putih);
+}
+
+/* Nomor order */
+.order-number {
+  font-size: 0.82rem;
+  color: var(--teks-abu);
+  font-weight: 600;
+}
+
+/* List item pesanan */
+.order-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 80px;
+}
+
+.empty-msg {
+  font-size: 0.85rem;
+  color: #b0b8c9;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 16px;
+}
+
+/* Satu item pesanan */
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-abu);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.order-item-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.order-item-detail {
+  flex: 1;
+}
+
+.order-item-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--teks-gelap);
+}
+
+.order-item-price {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--biru);
+  margin-top: 2px;
+}
+
+/* Kontrol jumlah */
+.order-item-qty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qty-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--putih);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  color: var(--teks-gelap);
+}
+
+.qty-btn:hover {
+  background: var(--kuning);
+  border-color: var(--kuning);
+}
+
+.qty-number {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--teks-gelap);
+  min-width: 16px;
+  text-align: center;
+}
+
+/* =====================
+   RINGKASAN HARGA
+===================== */
+.order-summary {
+  border-top: 1.5px solid var(--border);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--teks-abu);
+  font-weight: 600;
+}
+
+.summary-row.total {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--teks-gelap);
+  margin-top: 4px;
+}
+
+/* =====================
+   METODE PEMBAYARAN
+===================== */
+.payment-section h4 {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--teks-gelap);
+  margin-bottom: 10px;
+}
+
+.payment-methods {
+  display: flex;
+  gap: 8px;
+}
+
+.pay-btn {
+  flex: 1;
+  padding: 9px 6px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--putih);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--teks-abu);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pay-btn:hover {
+  border-color: var(--kuning);
+  color: var(--teks-gelap);
+}
+
+.pay-btn.active {
+  background: var(--teks-gelap);
+  border-color: var(--teks-gelap);
+  color: var(--putih);
+}
+
+/* =====================
+   TOMBOL CHECKOUT
+===================== */
+.btn-checkout {
+  width: 100%;
+  padding: 14px;
+  background: var(--kuning);
+  border: none;
+  border-radius: 14px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--teks-gelap);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 18px rgba(245,184,0,0.35);
+}
+
+.btn-checkout:hover {
+  background: var(--kuning-tua);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(245,184,0,0.45);
+}
+
+.btn-checkout:active {
+  transform: translateY(0);
+}
+
+/* =====================
+   TOAST NOTIFIKASI
+===================== */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: var(--teks-gelap);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 40px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 999;
+  white-space: nowrap;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

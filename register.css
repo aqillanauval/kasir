@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f0fb;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(255,182,193,0.35) 0%, transparent 50%),
+    radial-gradient(circle at 85% 80%, rgba(200,180,255,0.3) 0%, transparent 50%);
+  padding: 24px;
+}
+
+/* CARD UTAMA */
+.card {
+  background: #fff;
+  border-radius: 28px;
+  box-shadow:
+    0 8px 40px rgba(120,80,180,0.13),
+    0 2px 8px rgba(0,0,0,0.06);
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  max-width: 880px;
+  animation: fadeUp 0.6s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =====================
+   SISI KIRI - GAMBAR
+===================== */
+.card-image {
+  flex: 0 0 42%;
+  position: relative;
+  overflow: hidden;
+  min-height: 560px;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 22px;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.card-image:hover img {
+  transform: scale(1.04);
+}
+
+.card-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,180,0,0.06), rgba(100,60,200,0.06));
+  border-radius: 22px;
+  pointer-events: none;
+}
+
+/* =====================
+   SISI KANAN - FORM
+===================== */
+.card-form {
+  flex: 1;
+  padding: 40px 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.brand-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a2340;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+
+.brand-subtitle {
+  font-size: 0.95rem;
+  color: #2563eb;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+/* =====================
+   FORM GROUP
+===================== */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+/* =====================
+   INPUT
+===================== */
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: #9ca3af;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+.form-input {
+  width: 100%;
+  padding: 11px 14px 11px 40px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 0.93rem;
+  font-family: 'Nunito', sans-serif;
+  color: #1a2340;
+  background: #fafafa;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+.form-input::placeholder {
+  color: #b0b8c9;
+}
+
+.form-input:focus {
+  border-color: #2563eb;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+/* =====================
+   TOGGLE PASSWORD
+===================== */
+.toggle-pass {
+  position: absolute;
+  right: 13px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  font-size: 1rem;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.toggle-pass:hover {
+  color: #2563eb;
+}
+
+/* =====================
+   PESAN ERROR
+===================== */
+.error-msg {
+  font-size: 0.8rem;
+  color: #dc2626;
+  margin-top: 5px;
+  display: none;
+  font-weight: 600;
+}
+
+/* =====================
+   CHECKBOX SYARAT
+===================== */
+.terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.terms-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  accent-color: #2563eb;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.terms-row label {
+  font-size: 0.85rem;
+  color: #4b5563;
+  cursor: pointer;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.terms-link {
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.terms-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* =====================
+   TOMBOL SIGN UP
+===================== */
+.btn-signup {
+  width: 100%;
+  padding: 13px;
+  background: #f5b800;
+  border: none;
+  border-radius: 13px;
+  font-size: 1rem;
+  font-weight: 800;
+  font-family: 'Nunito', sans-serif;
+  color: #1a2340;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  margin-top: 18px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 18px rgba(245,184,0,0.35);
+}
+
+.btn-signup:hover {
+  background: #e0a800;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(245,184,0,0.45);
+}
+
+.btn-signup:active {
+  transform: translateY(0);
+}
+
+/* =====================
+   TEKS LOGIN
+===================== */
+.login-text {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.87rem;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.login-text a {
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.login-text a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* =====================
+   TOAST NOTIFIKASI
+===================== */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: #1a2340;
+  color: #fff;
+  padding: 13px 26px;
+  border-radius: 40px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 999;
+  white-space: nowrap;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media (max-width: 640px) {
+  .card {
+    flex-direction: column;
+  }
+
+  .card-image {
+    flex: 0 0 200px;
+    min-height: 200px;
+  }
+
+  .card-form {
+    padding: 28px 22px;
+  }
+
+  .brand-title {
+    font-size: 1.6rem;
+  }
+}
